@@ -1,13 +1,16 @@
 <template>
   <div>
-     App
+     <router-view></router-view>
+     <FooterGuide/>
   </div>
 </template>
 
 <script>
-
+import FooterGuide from './components/FooterGuide/FooterGuide'
    export default {
-       
+       components:{ // 局部注册组件  全局注册组件的话在哪里都可以用
+         FooterGuide
+       }
    }
 </script>
 
