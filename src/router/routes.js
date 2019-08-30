@@ -3,6 +3,7 @@ import MSite from '../pages/MSite/MSite.vue'
 import Order from '../pages/Order/Order.vue'
 import Profile from '../pages/Profile/Profile.vue'
 import Search from '../pages/Search/Search.vue'
+import Login from '../pages/Login/Login.vue'
 export default [
   {
     path: '/msite',
@@ -28,6 +29,13 @@ export default [
   {
     path: '/profile',
     component: Profile,
+    meta: {
+      isShowFooter: true
+    }
+  },
+  {
+    path: '/login',
+    component: Login,
     meta: {
       isShowFooter: true
     }
