@@ -9,7 +9,7 @@ axios函数封装
 */
 import axios from 'axios'
 import qs from 'qs'
-// 设置所有请求默认路径 后面就不用添加了
+// 设置所有请求默认路径 后面就不用添加了   你就往8080发请求就行  代理给你转发到4000
 axios.defaults.baseURL = 'http://localhost:8080'
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
@@ -19,6 +19,7 @@ axios.interceptors.request.use(config => {
     // 转化为 urlencode形式
     config.data = qs.stringify(data)
   }
+  
   return config
 })
 

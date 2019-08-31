@@ -3,12 +3,12 @@
 每个函数返回的都是promise
 */
 import ajax from './ajax'
+
 // 1. 根据经纬度获取位置详情 作为函数使用
 
-export const reqAddress = (longitude, latitude) =>
-  ajax({
+export const reqAddress = (longitude,latitude) =>ajax({
     method: 'GET', // 可省  默认GET
-    url: `/position/${longitude},${latitude}` // params 参数
+    url:  `/position/${latitude},${longitude}` // params 参数
   })
 
 // 2. 获取食品分类 作为对象使用
@@ -28,7 +28,3 @@ export const reqShops = (
       latitude
     }
   })
-
-
-
-console.log(reqAddress(40.10038,116.36867))

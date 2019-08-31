@@ -1,19 +1,21 @@
 <template>
   <div>
-     <router-view></router-view>
-     <FooterGuide/>
+    <router-view></router-view>
+    <FooterGuide />
   </div>
 </template>
 
 <script>
 import FooterGuide from './components/FooterGuide/FooterGuide'
-   export default {
-       components:{ // 局部注册组件  全局注册组件的话在哪里都可以用
-         FooterGuide
-       }
-   }
+export default {
+  mounted() {
+    this.$store.dispatch('getAddress')
+  },
+  components: {
+    // 局部注册组件  全局注册组件的话在哪里都可以用
+    FooterGuide
+  }
+}
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus' scoped>
-
-</style>
+<style lang='stylus' rel='stylesheet/stylus' scoped></style>

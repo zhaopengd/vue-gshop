@@ -1,5 +1,5 @@
-module.exports = {// 配置代理
+module.exports = {
   devServer: {
-      proxy: 'http://localhost:4000'
+    proxy: 'http://localhost:4000'
   }
 }
