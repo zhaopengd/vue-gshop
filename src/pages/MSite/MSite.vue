@@ -126,6 +126,9 @@
 import { mapState } from 'vuex'
 import Shops from '../../components/Shops/Shops'
 export default {
+  mounted() {
+    this.$store.dispatch('getShops')
+  }, 
   computed: { // 简化 this.$store.state.address
     ...mapState(['address'])
   },
