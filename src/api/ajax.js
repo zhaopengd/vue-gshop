@@ -9,12 +9,13 @@ axios函数封装
 */
 import axios from 'axios'
 import qs from 'qs'
-
+// 设置所有请求默认路径 后面就不用添加了
+axios.defaults.baseURL = 'http://localhost:8080'
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
   const { method, data } = config
   // 判断axios请求参数 是否为POST请求 并且data请求体参数存在
-  if (methosd.toUpperCase() === 'POST' && data instanceof Object) {
+  if (method.toUpperCase() === 'POST' && data instanceof Object) {
     // 转化为 urlencode形式
     config.data = qs.stringify(data)
   }
