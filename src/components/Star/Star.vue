@@ -1,17 +1,40 @@
 <template>
-  <div class="star star-24">
-    <span class="star-item on"></span>
-    <span class="star-item on"></span>
-    <span class="star-item on"></span>
-    <span class="star-item half"></span>
-    <span class="star-item off"></span>
+  <div class="star" :class=" 'star-' + size">
+    <!-- startClasses 根据分数 计算产生星星的数组 -->
+    <span class="star-item" v-for="(c, index) in starClasses" :key="index" :class="c"></span>
   </div>
 </template>
 
 <script>
 export default {
-  props:{
-    
+  props: {
+    score: Number,
+    size: Number
+  },
+  computed: {
+    /*
+      星星类名的数组
+      3.5 = 3 + 1 + 1
+      */
+    starClasses() {
+      const { score } = this
+      const scoreInteger = Math.floor(score)
+      const arr = []
+      // 1. 添加n个on
+      for (let i = 0; i < scoreInteger; i++) {
+        arr.push('on')
+      }
+      // 2. 添加0/1个half 小数的计算是有误差的  所以 * 10
+      if (score * 10 - scoreInteger * 10 >= 5) {
+        arr.push('half')
+      }
+      // 3. 添加m个off
+      while (arr.length < 5) {
+        arr.push('off')
+      }
+
+      return arr
+    }
   }
 }
 </script>
