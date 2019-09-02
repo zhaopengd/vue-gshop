@@ -31,10 +31,15 @@
           <div :class="{on : !loginWay}">
             <section>
               <section class="login_message">
-                <input type="text" placeholder="用户名" v-model="name"/>
+                <input type="text" placeholder="用户名" v-model="name" />
               </section>
               <section class="login_verification">
-                <input :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码" v-model="pwd" />
+                <input
+                  :type="isShowPwd ? 'text' : 'password'"
+                  maxlength="8"
+                  placeholder="密码"
+                  v-model="pwd"
+                />
                 <div
                   class="switch_button"
                   :class="isShowPwd ? 'on' : 'off'"
@@ -117,9 +122,9 @@ export default {
     },
     // 更新显示图形验证码
     undateCaptcha() {
-      (this.$refs.captcha.src =
-        'http://localhost:4000/captcha?time=' + Date.now()),
-        console.log(123)
+      this.$refs.captcha.src =
+        'http://localhost:4000/captcha?time=' + Date.now()
+      console.log(123)
     },
     // 请求登录
     async login() {
@@ -132,22 +137,21 @@ export default {
         this.computeTime = 0
       } else {
         // 密码登录
-        result = await reqPwdLogin({ name, pwd,captcha })
+        result = await reqPwdLogin({ name, pwd, captcha })
         // 如果登录失败 更新图形验证码
-        if (result.code===1) {
-         this. undateCaptcha()
+        if (result.code === 1) {
+          this.undateCaptcha()
           // 清空上次错误输入
-          this.captcha=''
+          this.captcha = ''
         }
       }
       // 根据请求的结果进行相应处理
       if (result.code === 0) {
         const user = result.data
         // 将user 保存到state中
-        this.$store.dispatch('saveUser',user)
+        this.$store.dispatch('saveUser', user)
         // 跳转到个人中心
         this.$router.replace('/profile')
-        
       } else {
         MessageBox.alert(result.msg)
       }

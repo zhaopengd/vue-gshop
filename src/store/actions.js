@@ -7,7 +7,9 @@ import {
   RECEIVE_CATEGORYS,
   RECEIVE_SHOPS,
   RECEIVE_USER,
-  RESET_USER
+  RECEIVE_TOKEN,
+  RESET_USER,
+  RESET_TOKEN
 } from './mutation-types'
 export default {
   // 获取当前地址信息
@@ -53,11 +55,23 @@ export default {
   // 保存user的同步 action、
 
   saveUser({ commit }, user) {
+    // 取出token
+    const token = user.token
+    // 保存到 localStorage中
+    localStorage.setItem('koken_key', token)
+
+    // 将token保存到state中
+    commit(RECEIVE_TOKEN, { token })
+    // 删除user 中的token（可以不删）
+    delete user.token
+
     commit(RECEIVE_USER, { user }) // 有些人喜欢传过去一个对象
   },
 
   // 退出登录
   logout({ commit }) {
     commit(RESET_USER)
+    commit(RESET_TOKEN)
+    localStorage.removeItem('token_key')
   }
 }

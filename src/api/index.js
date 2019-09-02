@@ -14,7 +14,12 @@ export const reqAddress = (longitude, latitude) =>
 
 // 2. 获取食品分类 作为对象使用
 
-export const reqCategorys = () => ajax.get('/index_category') //没有参数 所以不写
+export const reqCategorys = () =>
+  ajax.get('/index_category', {
+    headers: {
+      needToken: true
+    }
+  }) //没有参数 所以不写
 
 // 3. 根据经纬度获取商铺列表 作为函数使用
 
@@ -27,6 +32,9 @@ export const reqShops = (
       // 第二种传递参数方式
       longitude,
       latitude
+    },
+    headers: {
+      needToken: true
     }
   })
 
@@ -42,7 +50,7 @@ export const reqSendCode = phone =>
 export const reqPwdLogin = ({ name, pwd, captcha }) =>
   ajax({
     method: 'POST',
-    url:'/login_pwd',
+    url: '/login_pwd',
     data: {
       name,
       pwd,
@@ -54,7 +62,7 @@ export const reqPwdLogin = ({ name, pwd, captcha }) =>
 export const reqSmsLogin = (phone, code) =>
   ajax({
     method: 'POST',
-    url:'/login_sms',
+    url: '/login_sms',
     data: {
       phone,
       code
