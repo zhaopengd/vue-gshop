@@ -128,14 +128,23 @@ export default {
       if (loginWay) {
         // 短信登录
         result = await reqSmsLogin(phone, code)
+        // 请求完成之后 停止计时
+        this.computeTime = 0
       } else {
         // 密码登录
         result = await reqPwdLogin({ name, pwd,captcha })
+        // 如果登录失败 更新图形验证码
+        if (result.code===1) {
+         this. undateCaptcha()
+          // 清空上次错误输入
+          this.captcha=''
+        }
       }
       // 根据请求的结果进行相应处理
       if (result.code === 0) {
         const user = result.data
         // 将user 保存到state中
+        this.$store.dispatch('saveUser',user)
         // 跳转到个人中心
         this.$router.replace('/profile')
         

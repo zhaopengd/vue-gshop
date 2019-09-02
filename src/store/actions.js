@@ -5,7 +5,9 @@ import { reqAddress, reqShops, reqCategorys } from '../api'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_USER
+  
 } from './mutation-types'
 export default {
   // 获取当前地址信息
@@ -46,5 +48,11 @@ export default {
       //2.有了结果 提交mutation
       commit(RECEIVE_SHOPS, shops)
     }
+  },
+
+  // 保存user的同步 action、
+
+  saveUser({commit},user){
+    commit(RECEIVE_USER,user)
   }
 }
