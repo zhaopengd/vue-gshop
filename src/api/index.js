@@ -6,14 +6,15 @@ import ajax from './ajax'
 
 // 1. 根据经纬度获取位置详情 作为函数使用
 
-export const reqAddress = (longitude,latitude) =>ajax({
+export const reqAddress = (longitude, latitude) =>
+  ajax({
     method: 'GET', // 可省  默认GET
-    url:  `/position/${latitude},${longitude}` // params 参数
+    url: `/position/${latitude},${longitude}` // params 参数
   })
 
 // 2. 获取食品分类 作为对象使用
 
-export const reqCategorys =()=> ajax.get('/index_category') //没有参数 所以不写
+export const reqCategorys = () => ajax.get('/index_category') //没有参数 所以不写
 
 // 3. 根据经纬度获取商铺列表 作为函数使用
 
@@ -29,3 +30,33 @@ export const reqShops = (
     }
   })
 
+// 4. 发送短信验证码
+export const reqSendCode = phone =>
+  ajax({
+    method: 'GET',
+    url: '/sendcode',
+    params: { phone }
+  })
+
+// 5. 用户名密码登陆  由于参数多  所以我们就让他用对象传过来
+export const reqPwdLogin = ({ name, pwd, captcha }) =>
+  ajax({
+    method: 'POST',
+    url:'/login_pwd',
+    data: {
+      name,
+      pwd,
+      captcha
+    }
+  })
+
+// 6. 手机号/短信登陆
+export const reqSmsLogin = (phone, code) =>
+  ajax({
+    method: 'POST',
+    url:'/login_sms',
+    data: {
+      phone,
+      code
+    }
+  })

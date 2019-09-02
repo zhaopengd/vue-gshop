@@ -21,7 +21,7 @@
               >{{computeTime>0 ? `短信已发送${computeTime}s` : '获取验证码'}}</button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码" />
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code" />
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -31,10 +31,10 @@
           <div :class="{on : !loginWay}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名" />
+                <input type="text" placeholder="用户名" v-model="name"/>
               </section>
               <section class="login_verification">
-                <input :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码" />
+                <input :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码" v-model="pwd" />
                 <div
                   class="switch_button"
                   :class="isShowPwd ? 'on' : 'off'"
@@ -45,7 +45,7 @@
                 </div>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码" />
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha" />
                 <img
                   class="get_verification"
                   src="http://localhost:4000/captcha"
@@ -56,7 +56,7 @@
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click.prevent="login">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -68,11 +68,17 @@
 </template>
 
 <script>
+import { reqSendCode, reqPwdLogin, reqSmsLogin } from '../../api'
+import { Toast, MessageBox } from 'mint-ui'
 export default {
   data() {
     return {
       loginWay: false, // true 代表短信登录
       phone: '', // 手机号码
+      code: '', // 短信验证码
+      name: '', // 用户名
+      pwd: '', // 密码
+      captcha: '', // 图形验证码
       computeTime: 0, // 计算剩余时间
       isShowPwd: false // 是否显示密码
     }
@@ -86,7 +92,7 @@ export default {
     }
   },
   methods: {
-    sendCode() {
+    async sendCode() {
       //  将computedTime设置成最大值
       this.computeTime = 10
       // 启动循环定时器进行计时
@@ -97,12 +103,45 @@ export default {
           clearInterval(intervalId)
         }
       }, 1000)
+      // 发送ajax请求 获取验证码
+      const result = await reqSendCode(this.phone)
+      if (result.code === 0) {
+        // alert('短信已发送')
+        Toast('短信已发送')
+      } else {
+        // 停止计时
+        this.computeTime = 0
+        //  alert(result.msg)
+        MessageBox.alert(result.msg)
+      }
     },
     // 更新显示图形验证码
     undateCaptcha() {
-      this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+Date.now(),
-      console.log(123);
-      
+      (this.$refs.captcha.src =
+        'http://localhost:4000/captcha?time=' + Date.now()),
+        console.log(123)
+    },
+    // 请求登录
+    async login() {
+      const { loginWay, phone, captcha, code, name, pwd } = this
+      let result
+      if (loginWay) {
+        // 短信登录
+        result = await reqSmsLogin(phone, code)
+      } else {
+        // 密码登录
+        result = await reqPwdLogin({ name, pwd,captcha })
+      }
+      // 根据请求的结果进行相应处理
+      if (result.code === 0) {
+        const user = result.data
+        // 将user 保存到state中
+        // 跳转到个人中心
+        this.$router.replace('/profile')
+        
+      } else {
+        MessageBox.alert(result.msg)
+      }
     }
   }
 }
