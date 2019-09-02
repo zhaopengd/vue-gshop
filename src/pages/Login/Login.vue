@@ -41,14 +41,18 @@
                   @click="isShowPwd=!isShowPwd"
                 >
                   <div class="switch_circle" :class="{right : isShowPwd}"></div>
-                  <span class="switch_text">
-                    {{isShowPwd ?'abc' : ''}}
-                  </span>
+                  <span class="switch_text">{{isShowPwd ?'abc' : ''}}</span>
                 </div>
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" />
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha" />
+                <img
+                  class="get_verification"
+                  src="http://localhost:4000/captcha"
+                  alt="captcha"
+                  ref="captcha"
+                  @click.prevent="undateCaptcha"
+                />
               </section>
             </section>
           </div>
@@ -67,7 +71,7 @@
 export default {
   data() {
     return {
-      loginWay: true, // true 代表短信登录
+      loginWay: false, // true 代表短信登录
       phone: '', // 手机号码
       computeTime: 0, // 计算剩余时间
       isShowPwd: false // 是否显示密码
@@ -93,6 +97,12 @@ export default {
           clearInterval(intervalId)
         }
       }, 1000)
+    },
+    // 更新显示图形验证码
+    undateCaptcha() {
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+Date.now(),
+      console.log(123);
+      
     }
   }
 }
