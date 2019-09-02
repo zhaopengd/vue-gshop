@@ -67,7 +67,6 @@ export default {
         if (smallArr.length === 0) {
           bigArr.push(smallArr)
         }
-
         // 将分类对象放入小数组(小数组的长度最大为8)
         smallArr.push(c)
         // 如果满了, 重新准备一个新的小数组
