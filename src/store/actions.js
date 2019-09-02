@@ -6,8 +6,8 @@ import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
   RECEIVE_SHOPS,
-  RECEIVE_USER
-  
+  RECEIVE_USER,
+  RESET_USER
 } from './mutation-types'
 export default {
   // 获取当前地址信息
@@ -52,7 +52,12 @@ export default {
 
   // 保存user的同步 action、
 
-  saveUser({commit},user){
-    commit(RECEIVE_USER,user)
+  saveUser({ commit }, user) {
+    commit(RECEIVE_USER, { user }) // 有些人喜欢传过去一个对象
+  },
+
+  // 退出登录
+  logout({ commit }) {
+    commit(RESET_USER)
   }
 }
