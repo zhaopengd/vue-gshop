@@ -22,7 +22,7 @@ export default {
   },
 
   // 获取当前商品分类
-  async getCategorys({ commit }) {
+  async getCategorys({ commit }, callback) {
     // 接收context 下面使用 context.commit
     // 1. 调用接口请求函数
     const result = await reqCategorys()
@@ -30,6 +30,8 @@ export default {
       const categorys = result.data
       //2.有了结果 提交mutation
       commit(RECEIVE_CATEGORYS, categorys)
+      // 在commit之后执行callback
+      typeof callback === 'function' && callback()
     }
   },
 

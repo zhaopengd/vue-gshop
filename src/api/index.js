@@ -13,7 +13,7 @@ export const reqAddress = (longitude,latitude) =>ajax({
 
 // 2. 获取食品分类 作为对象使用
 
-export const reqCategorys = ajax.get('/index_category') //没有参数 所以不写
+export const reqCategorys =()=> ajax.get('/index_category') //没有参数 所以不写
 
 // 3. 根据经纬度获取商铺列表 作为函数使用
 
@@ -28,3 +28,4 @@ export const reqShops = (
       latitude
     }
   })
+
