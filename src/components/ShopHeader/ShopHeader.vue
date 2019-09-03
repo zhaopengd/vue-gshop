@@ -1,6 +1,6 @@
 <template>
   <div class="shop-header">
-    <nav class="shop-nav" :style="{backgroundImage: `url(${info.bgImg})`}">
+    <nav class="shop-nav" v-if="info.bgImg" :style="{backgroundImage: `url(${info.bgImg})`}">
       <a class="back" @click="$router.back()">
         <i class="iconfont icon-arrow_left" />
       </a>

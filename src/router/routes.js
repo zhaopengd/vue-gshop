@@ -63,7 +63,7 @@ export default [
         component: Info
       },
       {
-        path: '',
+        path: '/',
         redirect: '/shop/goods'
       }
     ],

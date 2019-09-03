@@ -1,64 +1,135 @@
 <template>
   <div>
-	    <div class="goods">
-	      <div class="menu-wrapper" ref="left">
-	        <ul>
-	          <!-- current -->
-	          <li class="menu-item" v-for="good in goods" :key="good.name">
-	            <span class="text bottom-border-1px">
-	              <img class="icon" v-if="good.icon" :src="good.icon">
-	              {{good.name}}
-	            </span>
-	          </li>
-	        </ul>
-	      </div>
-	
-	      <div class="foods-wrapper" ref="right">
-	        <ul>
-	          <li class="food-list-hook" v-for="good in goods" :key="good.name">
-	            <h1 class="title">{{good.name}}</h1>
-	            <ul>
-	              <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name">
-	                <div class="icon">
-	                  <img width="57" height="57" :src="food.icon">
-	                </div>
-	                <div class="content">
-	                  <h2 class="name">{{food.name}}</h2>
-	                  <p class="desc">{{food.description}}</p>
-	                  <div class="extra">
-	                    <span class="count">月售{{food.sellCount}}份</span>
-	                    <span>好评率{{food.rating}}%</span></div>
-	                  <div class="price">
-	                    <span class="now">￥{{food.price}}</span>
-	                    <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
-	                  </div>
-	                  <div class="cartcontrol-wrapper">
-	                    CartControl组件
-	                  </div>
-	                </div>
-	              </li>
-	            </ul>
-	          </li>
-	        </ul>
-	      </div>
-	    </div>
-	  </div>
+    <div class="goods">
+      <div class="menu-wrapper" ref="left">
+        <ul>
+          <!-- current -->
+          <li
+            class="menu-item"
+            :class="{current:currentIndex===index}"
+            v-for="(good,index) in goods"
+            :key="good.name"
+          >
+            <span class="text bottom-border-1px">
+              <img class="icon" v-if="good.icon" :src="good.icon" />
+              {{good.name}}
+            </span>
+          </li>
+        </ul>
+      </div>
 
-
-
+      <div class="foods-wrapper" ref="right">
+        <ul ref="rightUL">
+          <li class="food-list-hook" v-for="good in goods" :key="good.name">
+            <h1 class="title">{{good.name}}</h1>
+            <ul>
+              <li class="food-item bottom-border-1px" v-for="food in good.foods" :key="food.name">
+                <div class="icon">
+                  <img width="57" height="57" :src="food.icon" />
+                </div>
+                <div class="content">
+                  <h2 class="name">{{food.name}}</h2>
+                  <p class="desc">{{food.description}}</p>
+                  <div class="extra">
+                    <span class="count">月售{{food.sellCount}}份</span>
+                    <span>好评率{{food.rating}}%</span>
+                  </div>
+                  <div class="price">
+                    <span class="now">￥{{food.price}}</span>
+                    <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
+                  </div>
+                  <div class="cartcontrol-wrapper">CartControl组件</div>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { mapState } from 'vuex'
+import BSscroll from 'better-scroll'
 export default {
+  data() {
+    return {
+      scrollY: 0, // 右侧 上下滑动距离 实时改变
+      tops: [0, 5, 8, 12] // 右侧所有分类 li 的top 组成的数组 在列表显示之后统计一次即可
+    }
+  },
 
+  mounted() {
+    // 如果数据已经有了
+    if (this.goods.length > 0) {
+      // 解决了 切换 滑动失效问题
+      this._initScorll()
+      // li数组中 每一项距离最上面的距离
+      this._initTops()
+    }
+  },
   computed: {
     ...mapState({
       goods: state => state.shop.goods
-    })
-    /* 
-      当前分类的下标
-      */
+    }),
+
+    // 当前分类的下标
+    currentIndex() {
+      const { scrollY, tops } = this
+      return tops.findIndex(
+        (top, index) => scrollY >= top && scrollY < tops[index + 1]
+      )
+    }
+  },
+  watch: {
+    goods() {
+      // 数据上来有了 你换别的再回来 他都没调用
+      // goods 数据有了
+      this.$nextTick(() => {
+        // 以防万一
+        this._initScorll()
+        this._initTops()
+      })
+    }
+  },
+  methods: {
+    // methods 中常常放时间回调  下划线为了区别
+    _initScorll() {
+      const leftScorll = new BSscroll(this.$refs.left, {})
+      const rightScorll = new BSscroll(this.$refs.right, {
+        // 派发滚动事件
+        // probeType: 2  // 触摸 实时分发
+        //probeType: 3 //触摸 惯性 实时分发
+        probeType: 1 // 触摸  频率低
+        // 滑动分为触摸滑动 惯性滑动  编码滑动
+      })
+
+      // 给rightScorll 绑定scroll 的监听 --->better-scroll库
+      rightScorll.on('scroll', ({ x, y }) => {
+        console.log(y)
+        this.scrollY = Math.abs(y)
+      })
+      // 由于 probeType: 1 触摸频率低 非实时 所以绑定end
+      rightScorll.on('scrollEnd', ({ x, y }) => {
+        console.log(y)
+        this.scrollY = Math.abs(y)
+      })
+    },
+    _initTops() {
+      const tops = []
+      let top = 0
+      tops.push(top)
+      const lis = this.$refs.rightUL.children
+      // 让一个维数组 去执行真数组的方法
+      Array.prototype.forEach.call(lis, li => {
+        top += li.clientHeight
+        tops.push(top)
+      })
+      // 更新tops数据状态
+      this.tops = tops
+      console.log(tops)
+    }
   }
 }
 </script>
