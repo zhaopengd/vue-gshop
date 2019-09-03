@@ -1,7 +1,7 @@
 /* 
 包含n个用于间接修改状态数据的方法的对象
 */
-import { reqAddress, reqShops, reqCategorys } from '../api'
+import { reqAddress, reqShops, reqCategorys, reqAutoLogin } from '../api'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
@@ -58,7 +58,7 @@ export default {
     // 取出token
     const token = user.token
     // 保存到 localStorage中
-    localStorage.setItem('koken_key', token)
+    localStorage.setItem('token_key', token)
 
     // 将token保存到state中
     commit(RECEIVE_TOKEN, { token })
@@ -73,5 +73,16 @@ export default {
     commit(RESET_USER)
     commit(RESET_TOKEN)
     localStorage.removeItem('token_key')
+  },
+  // 自动登录
+  async autoLogin({ commit, state }) {// state 在大括号里面
+    if (state.token) {
+      const result = await reqAutoLogin()
+
+      if (result.code === 0) {
+        const user = result.data
+        commit(RECEIVE_USER, { user })
+      }
+    }
   }
 }

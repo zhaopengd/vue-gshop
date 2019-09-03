@@ -11,7 +11,7 @@ axios函数封装
 */
 import axios from 'axios'
 import qs from 'qs'
-import { Toast } from 'mit-ui'
+import { Toast } from 'mint-ui'
 import store from '../store'
 import router from '../router'
 // 设置所有请求默认路径 后面就不用添加了   你就往8080发请求就行  代理给你转发到4000
@@ -31,7 +31,7 @@ axios.interceptors.request.use(config => {
     /*  - 没有token 不发请求，直接进入失败的流程 */
     if (!token) {
       const error = new Error('没有token，不能发送请求')
-      error.code = 401 // 401 请求的资源不存在 （token过期）
+      error.status = 401 // 401 请求的资源不存在 （token过期）
       throw error
     } else {
       // - 有token ，添加到请求头中：Authorization=token
@@ -47,10 +47,10 @@ axios.interceptors.response.use(
     return response.data
   },
   error => {
-    const { response, code, message } = error
+    const { response, status, message } = error
     // 没发请求前失败了（需要token 但是没有token）
     if (!response) {
-      if (code === 401) {
+      if (status === 401) {
         if (router.currentRoute.path !== './login') {
           // 提示
           Toast(message)
@@ -59,19 +59,25 @@ axios.interceptors.response.use(
         }
       }
     } else {
+      const status = response.status  // 响应状态码
       // 发了请求发现token过期了
-      if (code === 401) {
-
-      } else if (code === 404) {
+      if (status === 401) {
+        if (router.currentRoute.path !== './login') {
+          Toast(response.data.message)
+          //退出登录
+          store.dispatch('logout')
+          // 跳转到登录页面
+          router.replace('/login')
+        }
+      } else if (status === 404) {
         //请求的资源不存在
         Toast('请求资源不存在')
       } else {
         Toast('请求错误' + message)
       }
     }
-
     // 统一处理错误
-    alert('请求异常' + error.message)
+ //   alert('请求异常' + error.message)
     // 中断promise链 pending状态 让外面的请求只处理成功的不处理失败的
     return new Promise(() => {})
   }
