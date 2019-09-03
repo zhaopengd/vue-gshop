@@ -52,8 +52,12 @@ export default {
   },
   computed: {
     // 简化 this.$store.state.address
-    ...mapState(['address', 'categorys','user']),
-
+   // ...mapState(['address', 'categorys','user']),只会去总状态中找   
+      ...mapState({
+        address:state=>state.msite.address,// 函数的返回值为属性值
+        categorys:state=>state.msite.categorys,
+        user:state=>state.user.user
+      }),
     /* 
       根据分类的一维数组生成二维数组
       小数组的最大长度为8
