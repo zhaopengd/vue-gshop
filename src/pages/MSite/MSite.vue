@@ -1,12 +1,14 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <Header :title="address.name || '正在定位中...'">
-      <span class="header_search" slot="left">
+    <Header :title="address.name || '正在定位中'">
+      <span class="header_search" slot="left" @click="$router.replace('/search')">
         <i class="iconfont icon-sousuo"></i>
       </span>
+
       <span class="header_login" slot="right">
-        <span class="header_login_text">登录|注册</span>
+        <i v-if="user._id" class="iconfont icon-geren"></i>
+        <span class="header_login_text" v-else @click="$router.push('/login')">登录|注册</span>
       </span>
     </Header>
     <!--首页导航-->
@@ -50,7 +52,7 @@ export default {
   },
   computed: {
     // 简化 this.$store.state.address
-    ...mapState(['address', 'categorys']),
+    ...mapState(['address', 'categorys','user']),
 
     /* 
       根据分类的一维数组生成二维数组

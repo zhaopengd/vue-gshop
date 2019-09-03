@@ -73,6 +73,10 @@ export const reqSmsLogin = (phone, code) =>
 
 export const reqAutoLogin = () =>
   ajax({
-    url:'/auto_login',
+    url: '/auto_login',
     headers: { needToken: true }
   })
+
+export const reqGoods = () => ajax('/goods')
+export const reqRatings = () => ajax('/ratings')
+export const reqInfo = () => ajax('/info')
