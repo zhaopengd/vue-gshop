@@ -40,7 +40,7 @@ const actions = {
     持久化保存token
     在state中保存user
   */
-  recordUser({ commit }, user) {
+  saveUser({ commit }, user) {
     // 将user的token保存到localStorage中
     localStorage.setItem('token_key', user.token)
     // 将token保存到state中

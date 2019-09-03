@@ -15,7 +15,7 @@ import { Toast } from 'mint-ui'
 import store from '../store'
 import router from '../router'
 // 设置所有请求默认路径 后面就不用添加了   你就往8080发请求就行  代理给你转发到4000
-axios.defaults.baseURL = 'http://localhost:8080'
+// axios.defaults.baseURL = 'http://localhost:8080'
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
   const { method, data } = config

@@ -9,7 +9,7 @@ import Shop from '../pages/Shop/Shop.vue'
 import Goods from '../pages/Shop/Goods/Goods.vue'
 import Info from '../pages/Shop/Info/Info.vue'
 import Ratings from '../pages/Shop/Ratings/Ratings.vue'
-import NotFound from '../pages/NotFound/NotFound.vue'
+
 export default [
   {
     path: '/msite',
@@ -55,7 +55,7 @@ export default [
         component: Goods
       },
       {
-        path: 'ratings',
+        path: '/shop/ratings',
         component: Ratings
       },
       {

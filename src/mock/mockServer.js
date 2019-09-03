@@ -1,19 +1,16 @@
+/* 
+	使用mockjs定义mock接口
+	*/
 import Mock from 'mockjs'
-import data from './data.json'  // 加载json文件得到解析后的 js对象   （webpack做的）
+import data from './data.json' // 加载json文件得到是解析后的js对象
 
-// console.log('mockServer')
-// 指定监听的url和对应的json数据模板
-Mock.mock('/goods', {
-  code: 0,
-  data: data.goods
-})
-Mock.mock('/ratings', {
-  code: 0,
-  data: data.ratings
-})
-Mock.mock('/info', {
-  code: 0,
-  data: data.info
-})
+// goods接口
+Mock.mock('/goods', { code: 0, data: data.goods })
 
-// export default xxx  不需要
+// ratings接口
+Mock.mock('/ratings', { code: 0, data: data.ratings })
+// info接口
+Mock.mock('/info', { code: 0, data: data.info })
+
+// export default ???
+console.log('mockServer....')
