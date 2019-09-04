@@ -8,10 +8,12 @@ import router from './router'
 import store from './store'
 import Header from './components/Header/Header.vue'
 import Star from './components/Star/Star.vue'
+import CartControl from './components/CartControl/CartControl.vue'
 
 // 注册全局组件
 Vue.component('Header', Header)
 Vue.component('Star', Star)
+Vue.component('CartControl', CartControl)
 Vue.component(Button.name, Button) // 名字可以写 Button 但是不太好 内部给你定义好了 mt-button
 // 提示
 Vue.config.productionTip = false

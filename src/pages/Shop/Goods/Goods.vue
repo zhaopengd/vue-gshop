@@ -39,13 +39,16 @@
                     <span class="now">￥{{food.price}}</span>
                     <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
-                  <div class="cartcontrol-wrapper">CartControl组件</div>
+                  <div class="cartcontrol-wrapper">
+                    <CartControl :food="food" />
+                  </div>
                 </div>
               </li>
             </ul>
           </li>
         </ul>
       </div>
+      <ShopCart />
     </div>
   </div>
 </template>
@@ -53,6 +56,7 @@
 <script type="text/ecmascript-6">
 import { mapState } from 'vuex'
 import BSscroll from 'better-scroll'
+import ShopCart from '../../../components/ShopCart/ShopCart'
 export default {
   data() {
     return {
@@ -84,6 +88,7 @@ export default {
       )
       // 先比较 发现不同才保存
       if (index != this.index && this.leftScorll) {
+        // eslint-disable-next-line
         this.index = index
         // 如果不同 则让左侧列表 滑动到 index 对应的 li
         const li = this.$refs.leftUL.children[index]
@@ -154,6 +159,9 @@ export default {
       // 让右侧列表滑动到对应位置
       this.rightScorll.scrollTo(0, -top, 500)
     }
+  },
+  components: {
+    ShopCart
   }
 }
 </script>
