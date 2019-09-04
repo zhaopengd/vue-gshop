@@ -2,13 +2,14 @@
   <div>
     <div class="goods">
       <div class="menu-wrapper" ref="left">
-        <ul>
+        <ul ref="leftUL">
           <!-- current -->
           <li
             class="menu-item"
             :class="{current:currentIndex===index}"
             v-for="(good,index) in goods"
             :key="good.name"
+            @click="selectItem(index)"
           >
             <span class="text bottom-border-1px">
               <img class="icon" v-if="good.icon" :src="good.icon" />
@@ -74,12 +75,22 @@ export default {
       goods: state => state.shop.goods
     }),
 
-    // 当前分类的下标
+    // 当前分类的下标  findIndex()方法返回数组中满足提供的测试函数的第一个元素的索引
     currentIndex() {
       const { scrollY, tops } = this
-      return tops.findIndex(
+      // 计算得到新的下标
+      const index = tops.findIndex(
         (top, index) => scrollY >= top && scrollY < tops[index + 1]
       )
+      // 先比较 发现不同才保存
+      if (index != this.index && this.leftScorll) {
+        this.index = index
+        // 如果不同 则让左侧列表 滑动到 index 对应的 li
+        const li = this.$refs.leftUL.children[index]
+        this.leftScorll.scrollToElement(li, 500)
+      }
+
+      return index
     }
   },
   watch: {
@@ -96,8 +107,11 @@ export default {
   methods: {
     // methods 中常常放时间回调  下划线为了区别
     _initScorll() {
-      const leftScorll = new BSscroll(this.$refs.left, {})
-      const rightScorll = new BSscroll(this.$refs.right, {
+      this.leftScorll = new BSscroll(this.$refs.left, {
+        click: true // 分发自定义点击事件
+      })
+      this.rightScorll = new BSscroll(this.$refs.right, {
+        click: true, // 分发自定义点击事件
         // 派发滚动事件
         // probeType: 2  // 触摸 实时分发
         //probeType: 3 //触摸 惯性 实时分发
@@ -106,12 +120,12 @@ export default {
       })
 
       // 给rightScorll 绑定scroll 的监听 --->better-scroll库
-      rightScorll.on('scroll', ({ x, y }) => {
+      this.rightScorll.on('scroll', ({ x, y }) => {
         console.log(y)
         this.scrollY = Math.abs(y)
       })
       // 由于 probeType: 1 触摸频率低 非实时 所以绑定end
-      rightScorll.on('scrollEnd', ({ x, y }) => {
+      this.rightScorll.on('scrollEnd', ({ x, y }) => {
         console.log(y)
         this.scrollY = Math.abs(y)
       })
@@ -129,6 +143,16 @@ export default {
       // 更新tops数据状态
       this.tops = tops
       console.log(tops)
+    },
+    selectItem(index) {
+      console.log(123)
+
+      const top = this.tops[index] // 拿出来的都是正值
+
+      // 立即更新scorllY值 (解决延迟问题 )
+      this.scrollY = top
+      // 让右侧列表滑动到对应位置
+      this.rightScorll.scrollTo(0, -top, 500)
     }
   }
 }
