@@ -1,8 +1,23 @@
 /* 路由配置模块 */
-import MSite from '../pages/MSite/MSite.vue'
-import Order from '../pages/Order/Order.vue'
-import Profile from '../pages/Profile/Profile.vue'
-import Search from '../pages/Search/Search.vue'
+// import MSite from '../pages/MSite/MSite.vue'
+// import Order from '../pages/Order/Order.vue'
+// import Profile from '../pages/Profile/Profile.vue'
+// import Search from '../pages/Search/Search.vue'
+/* 
+实现过程:
+1). 对引入模块进行拆分(单独)打包:  使用import()来引入模块
+2).配置的组件是: 返回包含模块的promise的函数, 函数初始不会执行, 请求对应的路径时才执行
+作用:
+减少首屏加载的js的大小, 提高了效率
+
+*/
+const MSite = () => import('../pages/MSite/MSite.vue')
+const Search = () => import('../pages/Search/Search.vue')
+const Order = () => import('../pages/Order/Order.vue')
+const Profile = () => import('../pages/Profile/Profile.vue')
+
+
+
 import Login from '../pages/Login/Login.vue'
 import Shop from '../pages/Shop/Shop.vue'
 

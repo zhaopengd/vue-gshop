@@ -50,7 +50,7 @@
 import { MessageBox } from 'mint-ui'
 import BScroll from 'better-scroll'
 import { mapState, mapGetters } from 'vuex'
-  import { CLEAR_CART } from '../../store/mutation-types'
+import { CLEAR_CART } from '../../store/mutation-types'
 export default {
   data() {
     return {
@@ -100,11 +100,13 @@ export default {
               2. 创建对象后: 保存对象
             */
           if (!this.scroll) {
+            // 解决点击翻倍的 问题
             // 第一次打开
             this.scroll = new BScroll(this.$refs.foodList, {
               click: true
             })
           } else {
+            // 解决里边 第一次不能拖动问题
             // 再次打开
             this.scroll.refresh() // 重新进行高度统计, 看是否需要形成滑动
           }
